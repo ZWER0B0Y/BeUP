@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:BeUP.ViewModels"
+             xmlns:converter="clr-namespace:BeUP.Converters"             
+             xmlns:model="clr-namespace:BeUP.Models"
+             xmlns:local="clr-namespace:BeUP.Services"
+             x:DataType="viewmodels:MyIngredientsViewModel"
+             x:Class="BeUP.View.MyIngredientsPage">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="logo"
+                   Margin="0, 0, 5, 0"
+                   WidthRequest="35"/>
+            <Label Text="BeUP" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="24"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+    
+    <Grid RowDefinitions="*, Auto, Auto"
+          ColumnDefinitions="*">
+        <CollectionView ItemsSource="{Binding AllIngredients}"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="WhiteSmoke">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:StringBoolCheck">
+                    <Grid Padding="10, 6, 10, 6">
+                        <Frame Padding="24, 6, 6, 6"
+                               Margin="1"
+                               HeightRequest="40"
+                               BorderColor="Transparent"
+                               BackgroundColor="LightGray"
+                               CornerRadius="70">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer CommandParameter="{Binding .}"
+                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyIngredientsViewModel}}, Path=DoCommand}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label x:Name="CategoryName"
+                                       Text="{Binding Name}"
+                                       Grid.Column="0"
+                                       FontSize="20"
+                                       TextColor="Black"/>
+                                <CheckBox Grid.Column="1"
+                                          InputTransparent="True"
+                                          IsChecked="{Binding Chosen}"
+                                          VerticalOptions="Center"
+                                          Color="DimGray"/>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Frame IsVisible="{Binding IsBusy}"
+               BackgroundColor="WhiteSmoke"
+               BorderColor="LightGray"
+               HorizontalOptions="CenterAndExpand"
+               VerticalOptions="CenterAndExpand"
+               WidthRequest="80"
+               HeightRequest="80"
+               CornerRadius="40"
+               Grid.Row="0">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="Gold"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand"
+                               WidthRequest="60"
+                               HeightRequest="60"
+                               Grid.RowSpan="2"/>
+        </Frame>
+        
+        <Border Grid.Row="1"
+                Margin="-3, 0, -3, -3"
+                Stroke="Gray"
+                BackgroundColor="WhiteSmoke"
+                StrokeThickness="1">
+            <Grid RowDefinitions="Auto, Auto"
+                  ColumnDefinitions="*, *">
+                <Entry x:Name="addEntry"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Placeholder="Назва інгредієнта"
+                       TextColor="Black"
+                       Margin="8, 6, 8, 6"
+                       ClearButtonVisibility="WhileEditing"/>
+                <Button Text="Створити інгредієнт"
+                        TextColor="Black"
+                        BackgroundColor="Gold"
+                        Margin="8, 6, 8, 6"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        CommandParameter="{Binding Source={x:Reference Name=addEntry}, Path=Text}"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyIngredientsViewModel}}, Path=CreateIngredientCommand}"/>
+                <Button Text="Додати інгредієнти"
+                        TextColor="Black"
+                        BackgroundColor="Gold"
+                        Margin="8, 6, 8, 6"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyIngredientsViewModel}}, Path=AddCommand}"/>
+            </Grid>
+        </Border>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:BeUP.ViewModels"
+             xmlns:converter="clr-namespace:BeUP.Converters"             
+             xmlns:model="clr-namespace:BeUP.Models"
+             xmlns:local="clr-namespace:BeUP.Services"
+             x:DataType="viewmodels:MyBreakfastsViewModel"
+             x:Class="BeUP.View.MyBreakfastsPage">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="logo"
+                   Margin="0, 0, 5, 0"
+                   WidthRequest="35"/>
+            <Label Text="BeUP" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="24"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:FavoriteImageConverter x:Key="FavoriteImageConverter" />
+            <converter:ChosenImageConverter x:Key="ChosenImageConverter" />
+            <converter:OwnImageConverter x:Key="OwnImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnSpacing="5"
+          RowDefinitions="Auto,*,Auto"
+          RowSpacing="0">
+
+        <Border Grid.Row="0"
+                Margin="-3, -3, -3, 0"
+                Stroke="Gray"
+                BackgroundColor="WhiteSmoke"
+                StrokeThickness="1">
+            <Label Text="Перетягніть рецепт ліворуч або праворуч, для того, щоб видалити або змінити рецепт."
+                    TextColor="Black"
+                    Margin="16, 8, 16, 8"/>
+        </Border>
+
+        <RefreshView Grid.Row="1" IsEnabled="False">
+            <CollectionView Background="WhiteSmoke"
+                                ItemsSource="{Binding MyBreakfasts}"
+                                SelectionMode="None"
+                                Grid.ColumnSpan="2">
+                <CollectionView.EmptyView>
+                    <Grid VerticalOptions="Center"
+                              HorizontalOptions="Center"
+                              RowDefinitions="Auto, Auto, Auto">
+                        <Image Source="bregg"
+                               WidthRequest="150"
+                               Grid.Row="0"/>
+                        <Label Text="Створіть свої рецепти,"
+                               TextColor="Black"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               Grid.Row="1"
+                               HorizontalOptions="Center"
+                               Padding="0, 10 ,0 ,5"/>
+                        <Label Text="щоб побачити їх тут."
+                               TextColor="Black"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               Grid.Row="2"
+                               HorizontalOptions="Center"/>
+                    </Grid>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Breakfast">
+                        <Grid Padding="10">
+                            <Frame Padding="0">
+                                <SwipeView BackgroundColor="LightGray">
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Видалити"
+                                                       IconImageSource="trash_bin"
+                                                       BackgroundColor="LightPink"
+                                                       CommandParameter="{Binding .}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastsViewModel}}, Path=DeleteMyBreakfastCommand}"/>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Редагувати"
+                                                       IconImageSource="edit"
+                                                       BackgroundColor="LightGreen"
+                                                       CommandParameter="{Binding .}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastsViewModel}}, Path=EditMyBreakfastCommand}"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Frame HeightRequest="210"
+                                           Padding="0"
+                                           BorderColor="DarkGray">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer CommandParameter="{Binding .}"
+                                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastsViewModel}}, Path=GoToDetailsCommand}"/>
+                                        </Frame.GestureRecognizers>
+                                        <Grid Padding="0"
+                                              ColumnDefinitions="125, *">
+                                            <Image Aspect="AspectFill"
+                                                   Source="{Binding Image}"
+                                                   WidthRequest="125"
+                                                   HeightRequest="210"/>
+                                            <HorizontalStackLayout Grid.Column="1"
+                                                                   Padding="0, -14, 10, 0"
+                                                                   Spacing="6"
+                                                                   VerticalOptions="Start"
+                                                                   HorizontalOptions="EndAndExpand">
+                                                <Grid ColumnDefinitions="Auto, Auto, Auto"
+                                                      FlowDirection="RightToLeft"
+                                                      ColumnSpacing="5">
+                                                    <ImageButton Source="{Binding Favorite, Converter={StaticResource FavoriteImageConverter}}"                                                     
+                                                                 CommandParameter="{Binding .}"
+                                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastsViewModel}}, Path=MarkFavoriteCommand}"
+                                                                 Grid.Column="0"
+                                                                 HorizontalOptions="Center"
+                                                                 VerticalOptions="Center"
+                                                                 WidthRequest="25"/>
+                                                    <Image Source="BeUP/Resources/Images/own"     
+                                                           IsVisible="{Binding Own, Converter={StaticResource OwnImageConverter}}"
+                                                           Grid.Column="1"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           WidthRequest="30"/>
+                                                    <Image Source="BeUP/Resources/Images/chosen"
+                                                           IsVisible="{Binding Chosen, Converter={StaticResource ChosenImageConverter}}"                                                            
+                                                           Grid.Column="2"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           WidthRequest="25"/>
+                                                </Grid>
+                                            </HorizontalStackLayout>
+                                            <VerticalStackLayout Grid.Column="1"
+                                                                 Padding="10"
+                                                                 Spacing="6"
+                                                                 VerticalOptions="Center">
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       LineBreakMode="TailTruncation"
+                                                       TextColor="DimGray"/>
+                                                <Label Text="{Binding Description}"
+                                                       TextColor="Black"
+                                                       FontSize="12"
+                                                       MaxLines="3"/>
+
+                                                <CollectionView ItemsSource="{Binding CategoryList}"
+                                                                ItemsLayout="HorizontalList">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="x:String">
+                                                            <Frame Padding="9, 5, 9, 5"
+                                                                   Margin="1"
+                                                                   BorderColor="Transparent"
+                                                                   BackgroundColor="Gold">
+                                                                <Label Text="{Binding}"
+                                                                       FontSize="12"
+                                                                       TextColor="Black"
+                                                                       VerticalTextAlignment="Center"
+                                                                       HorizontalTextAlignment="Center"/>
+                                                            </Frame>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+                                                <CollectionView ItemsSource="{Binding IngredientsList}"
+                                                        ItemsLayout="HorizontalList">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="x:String">
+                                                            <Frame Padding="9, 1, 9, 1"
+                                                                   Margin="1"
+                                                                   MinimumWidthRequest="40"
+                                                                   HeightRequest="2"
+                                                                   BorderColor="Transparent"
+                                                                   BackgroundColor="LightGray">
+                                                                <Label Text="{Binding}"
+                                                                       TextColor="Black"
+                                                                       FontSize="12"
+                                                                       VerticalTextAlignment="Center"
+                                                                       HorizontalTextAlignment="Center"/>   
+                                                            </Frame>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </SwipeView>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+             
+        <Frame IsVisible="{Binding IsBusy}"
+               BackgroundColor="WhiteSmoke"
+               BorderColor="LightGray"
+               HorizontalOptions="CenterAndExpand"
+               VerticalOptions="CenterAndExpand"
+               WidthRequest="80"
+               HeightRequest="80"
+               CornerRadius="40"
+               Grid.RowSpan="3">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="Gold"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand"
+                               WidthRequest="60"
+                               HeightRequest="60"
+                               Grid.RowSpan="2"/>
+        </Frame>
+        <Border Grid.Row="2"
+                Margin="-3, 0, -3, -3"
+                Stroke="Gray"
+                BackgroundColor="WhiteSmoke"
+                StrokeThickness="1">
+            <Button Text="Створити рецепт"
+                    TextColor="Black"
+                    BackgroundColor="Gold"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastsViewModel}}, Path=CreateRecipeCommand}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Margin="8"/>
+        </Border>
+
+    </Grid>
+</ContentPage>

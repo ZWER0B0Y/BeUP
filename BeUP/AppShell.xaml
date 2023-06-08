@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BeUP.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:view="clr-namespace:BeUP.View"
+    xmlns:local="clr-namespace:BeUP"
+    BackgroundColor="#F1C40F"
+    FlyoutBackground="WhiteSmoke">
+
+    <Shell.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="Gold" StatusBarStyle="DarkContent"/>
+    </Shell.Behaviors>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="0.2*,0.8*"
+                  Padding="0, 6, 0 ,0"
+                  BackgroundColor="WhiteSmoke">
+                <Image Source="{Binding FlyoutIcon}"
+                       Margin="5"
+                       HeightRequest="40" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       TextColor="Black"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="0.2*,0.8*"
+                  BackgroundColor="WhiteSmoke"
+                  ColumnSpacing="10"
+                  HeightRequest="150"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
+                <Image Source="logo"
+                       Margin="5"
+                       HeightRequest="80"
+                       WidthRequest="80"/>
+                <Label Text="BeUP"
+                       Grid.Column="1"
+                       TextColor="Black"
+                       FontSize="40"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <FlyoutItem Title="Всі рецепти"
+                Icon="egg">
+        <Tab>
+            <ShellContent Shell.NavBarIsVisible="True"
+                          ContentTemplate="{DataTemplate view:BreakfastsPage}"
+                          Route="MainPage" /> 
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Обраний рецепт"
+                Icon="chosen">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate view:ChosenBreakfastPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Улюблене"
+                Icon="favorite_active">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate view:FavoritesPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Власні рецепти"
+                Icon="own">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate view:MyBreakfastsPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Пошук за категоріями"
+                Icon="pa64_2t">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate view:CategoriesPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Пошук за інгредієнтами"
+                Icon="pa64_3t">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate view:IngredientsSearchPage}" />
+        </Tab>
+    </FlyoutItem>
+
+</Shell>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:BeUP.ViewModels"
+             xmlns:converter="clr-namespace:BeUP.Converters"
+             x:DataType="viewmodels:ChosenBreakfastViewModel"
+             x:Class="BeUP.View.ChosenBreakfastPage">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="logo"
+                   Margin="0, 0, 5, 0"
+                   WidthRequest="35"/>
+            <Label Text="BeUP" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="24"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:FavoriteImageConverter x:Key="FavoriteImageConverter" />
+            <converter:ChosenImageConverter x:Key="OpChosenImageConverter" />
+            <converter:ChosenImageConverter x:Key="ChosenImageConverter" />
+            <converter:OwnImageConverter x:Key="OwnImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*, 110"
+          BackgroundColor="WhiteSmoke">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout>
+                <Grid ColumnDefinitions="Auto"
+                      HorizontalOptions="Center"
+                      RowDefinitions="Auto">
+                    <Image Grid.RowSpan="2"
+                           HeightRequest="300"
+                           HorizontalOptions="Center"
+                           Aspect="AspectFill"
+                           Source="{Binding Breakfast.Image}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto, Auto, Auto"
+                      FlowDirection="RightToLeft"
+                      HorizontalOptions="Center"
+                      Grid.RowSpan="2"
+                      Grid.Row="0"
+                      Grid.Column="1">
+                    <ImageButton x:Name="FavImage"
+                                 Source="{Binding Breakfast.Favorite, Converter={StaticResource FavoriteImageConverter}}"                                                     
+                                 CommandParameter="{Binding Breakfast}"
+                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ChosenBreakfastViewModel}}, Path=MarkFavoriteCommand}"
+                                 Grid.Column="0"
+                                 Margin="5, 10, 5, 0"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 HeightRequest="35"
+                                 WidthRequest="35"/>
+                    <Image Source="BeUP/Resources/Images/own"     
+                           IsVisible="{Binding Breakfast.Own, Converter={StaticResource OwnImageConverter}}"
+                           Grid.Column="1"
+                           Margin="5, 10, 5, 0"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="35"/>
+                    <Image Source="BeUP/Resources/Images/chosen"
+                           IsVisible="{Binding Breakfast.Chosen, Converter={StaticResource ChosenImageConverter}}"
+                           Grid.Column="2"
+                           Margin="5, 10, 5, 0"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="35"/>
+                </Grid>
+
+                <Label Grid.Row="1"
+                       Margin="16, 4, 16, 4">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Breakfast.Name}"
+                                  TextColor="DimGray"
+                                  FontSize="24"
+                                  FontAttributes="Bold"/>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Grid.Row="1"
+                       Margin="16, 4, 16, 4">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Breakfast.Description}"
+                                  TextColor="Black"
+                                  FontSize="16"
+                                  FontAttributes="Italic"/>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Grid.Row="1"
+                       Margin="16, 4, 16, 4">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Breakfast.Recipe}"
+                                  TextColor="Black"
+                                  FontSize="16"/>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label Text="Categories:"
+                       TextColor="Black"
+                       Margin="16, 4, 16, 0"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+                <FlexLayout BindableLayout.ItemsSource="{Binding Breakfast.CategoryList}"
+                            Wrap="Wrap"
+                            Grid.Row="1"
+                            Margin="16, 4, 16, 4"
+                            AlignItems="Start">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Frame Padding="9, 5, 9, 5"
+                                   Margin="1"
+                                   MinimumWidthRequest="40"
+                                   HeightRequest="40"
+                                   BorderColor="Transparent"
+                                   BackgroundColor="Gold">
+                                <Label Text="{Binding .}"
+                                       FontSize="16"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="Black"/>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+                <Label Text="Ingredients:"
+                       TextColor="Black"
+                       Margin="16, 4, 16, 0"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+                <FlexLayout BindableLayout.ItemsSource="{Binding Breakfast.IngredientsList}"
+                            Wrap="Wrap"
+                            Margin="16, 4, 16, 4"
+                            AlignItems="Start">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Frame Padding="9, 1, 9, 1"
+                                   Margin="1"
+                                   MinimumWidthRequest="60"
+                                   HeightRequest="27"
+                                   BorderColor="Transparent"
+                                   BackgroundColor="LightGray">
+                                <Label Text="{Binding .}"
+                                       TextColor="Black"
+                                       FontSize="16"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"/>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <Border Margin="-3"
+                Padding="10"
+                Grid.Row="1"
+                BackgroundColor="Transparent">
+            <Grid FlowDirection="LeftToRight"
+                  RowDefinitions="*, *">
+                <Label Text="Ми можемо нагадати вам про цю страву у будь-який, для вас, зручний момент."
+                       TextColor="Black"
+                       Grid.Row="0"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       Padding="5, 0, 5, 0"/>
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Grid.Row="1">
+                    <Label Text="Години:"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                    <Entry x:Name="EditorHours"
+                           TextColor="Black"
+                           Margin="0, 3, 10, 0" 
+                           WidthRequest="60"
+                           Placeholder="00-23"
+                           MaxLength="2"
+                           Keyboard="Numeric"
+                           HorizontalTextAlignment="Center"
+                           TextChanged="EditorHour_TextChanged"/>
+                    <Label Text="Хвилини:"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                    <Entry x:Name="EditorMinutes"
+                           TextColor="Black"
+                           Margin="0, 3, 10, 0" 
+                           WidthRequest="60"
+                           Placeholder="00-59"
+                           MaxLength="2"
+                           Keyboard="Numeric"
+                           HorizontalTextAlignment="Center"
+                           TextChanged="EditorMinute_TextChanged"/>
+                    <Button Text="Нагадати"
+                            TextColor="Black"
+                            BackgroundColor="Gold"
+                            WidthRequest="110"
+                            CommandParameter="{Binding Breakfast}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ChosenBreakfastViewModel}}, Path=NotificationCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <Frame IsVisible="{Binding IsBusy}"
+                   BackgroundColor="WhiteSmoke"
+                   BorderColor="LightGray"
+                   HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand"
+                   WidthRequest="80"
+                   HeightRequest="80"
+                   CornerRadius="40"
+                   Grid.Row="0">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="Gold"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand"
+                               WidthRequest="60"
+                               HeightRequest="60"
+                               Grid.RowSpan="2"/>
+        </Frame>
+
+    </Grid>
+</ContentPage>

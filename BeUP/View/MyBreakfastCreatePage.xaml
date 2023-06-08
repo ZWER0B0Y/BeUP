@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:BeUP.ViewModels"
+             xmlns:converter="clr-namespace:BeUP.Converters"             
+             xmlns:model="clr-namespace:BeUP.Models"
+             xmlns:local="clr-namespace:BeUP.Services"
+             x:DataType="viewmodels:MyBreakfastCreateViewModel"
+             x:Class="BeUP.View.MyBreakfastCreatePage">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="logo"
+                   Margin="0, 0, 5, 0"
+                   WidthRequest="35"/>
+            <Label Text="BeUP" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="24"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:FavoriteImageConverter x:Key="FavoriteImageConverter" />
+            <converter:ChosenImageConverter x:Key="OpChosenImageConverter" />
+            <converter:ChosenImageConverter x:Key="ChosenImageConverter" />
+            <converter:OwnImageConverter x:Key="OwnImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*, 60"
+          BackgroundColor="WhiteSmoke">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout>
+                <Grid ColumnDefinitions="Auto"
+                      HorizontalOptions="Center"
+                      RowDefinitions="Auto">
+                    <Frame HeightRequest="300"
+                           CornerRadius="0">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastCreateViewModel}}, Path=GetImageCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Image Grid.RowSpan="2"
+                           HeightRequest="300"
+                           HorizontalOptions="Center"
+                           Aspect="AspectFill"
+                           Source="{Binding ImageCur}"/>
+                    </Frame>
+                </Grid>
+
+                <Label Text="Натисінть на фотографію, для того, щоб змінити її."
+                       TextColor="Black"
+                       Grid.Row="1"
+                       HorizontalOptions="Center"
+                       Margin="16, 8, 16, 0"
+                       FontAttributes="Bold"/>
+
+                <Label Text="Назва рецепту:"
+                       TextColor="Black"
+                       Grid.Row="1"
+                       Margin="16, 16, 16, 0"
+                       FontAttributes="Bold"/>
+                <Entry x:Name="EditorName"
+                       TextColor="Black"
+                       Placeholder="Напишіть назву рецепту"
+                       Grid.Row="1"
+                       Margin="12, 0, 16, 4"
+                       TextChanged="EditorName_TextChanged"/>
+
+                <Label Text="Опис до рецепту:"
+                       TextColor="Black"
+                       Grid.Row="1"
+                       Margin="16, 4, 16, 0"
+                       FontAttributes="Bold"/>
+                <Editor x:Name="EditorDescription"
+                        TextColor="Black"
+                        Placeholder="Напишіть опис до рецепту"
+                        AutoSize="TextChanges"
+                        Grid.Row="1"
+                        Margin="12, 0, 16, 4"
+                        TextChanged="EditorDescription_TextChanged"/>
+
+                <Label Text="Рецепт приготування:"
+                       TextColor="Black"
+                       Grid.Row="1"
+                       Margin="16, 4, 16, 4"
+                       FontAttributes="Bold"/>
+                <Editor x:Name="EditorRecipe"
+                        TextColor="Black"
+                        Placeholder="Напишіть рецепт приготування"
+                        AutoSize="TextChanges"
+                        Grid.Row="1"
+                        Margin="12, 0, 16, 4"
+                        TextChanged="EditorRecipe_TextChanged"/>
+
+                <Label Text="Категорії:"
+                       TextColor="Black"
+                       Grid.Row="1"
+                       Margin="16, 4, 16, 0"
+                       FontAttributes="Bold"/>
+                <FlexLayout BindableLayout.ItemsSource="{Binding SelectedCategories}"
+                            AlignItems="Start"
+                            Wrap="Wrap"
+                            Margin="10, 0, 10, 0">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Frame Padding="9, 5, 9, 5"
+                                   Margin="1"
+                                   MinimumWidthRequest="60"
+                                   HeightRequest="30"
+                                   BorderColor="Transparent"
+                                   BackgroundColor="Gold">
+                                <Label Text="{Binding .}"
+                                       TextColor="Black"
+                                       FontSize="14"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"/>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+                <Frame HorizontalOptions="Start"
+                       Margin="13, 8, 9, 4"
+                       Padding="0"
+                       WidthRequest="85"
+                       HeightRequest="30"
+                       BackgroundColor="Gold"
+                       BorderColor="Gold">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastCreateViewModel}}, Path=GoToCategoriesCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                        <Label Text="Додати"
+                               TextColor="Black"
+                               Padding="0, 0, 3, 0"/>
+                        <Image Source="plus"
+                               HeightRequest="16"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Label Text="Інгредієнти:"
+                       TextColor="Black"
+                       Grid.Row="1"
+                       Margin="16, 4, 16, 0"
+                       FontAttributes="Bold"/>
+                <FlexLayout BindableLayout.ItemsSource="{Binding IngredientsList}"
+                            AlignItems="Start"
+                            Wrap="Wrap"
+                            Margin="10, 0, 10, 0">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Frame Padding="9, 1, 9, 1"
+                                   Margin="1"
+                                   MinimumWidthRequest="60"
+                                   HeightRequest="20"
+                                   BorderColor="LightGray"
+                                   BackgroundColor="LightGray">
+                                <Label Text="{Binding .}"
+                                       TextColor="Black"
+                                       FontSize="14"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Center"/>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+                <Frame HorizontalOptions="Start"
+                       Margin="12, 8, 9, 30"
+                       Padding="0"
+                       WidthRequest="85"
+                       HeightRequest="30"
+                       BackgroundColor="LightGray"
+                       BorderColor="LightGray">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastCreateViewModel}}, Path=GoToIngredientsCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                        <Label Text="Додати"
+                               TextColor="Black"
+                               Padding="0, 0, 3, 0"/>
+                        <Image Source="plus"
+                               HeightRequest="16"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="1"
+                Margin="-3, 0, -3, -3"
+                Stroke="Gray"
+                BackgroundColor="WhiteSmoke"
+                StrokeThickness="1">
+            <Button Text="Створити рецепт"
+                    TextColor="Black"
+                    BackgroundColor="Gold"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastCreateViewModel}}, Path=SaveRecipeCommand}"
+                    Grid.Row="1"
+                    Margin="8, 6, 8, 6"/>
+        </Border>
+
+        <Frame IsVisible="{Binding IsBusy}"
+               BackgroundColor="WhiteSmoke"
+               BorderColor="LightGray"
+               HorizontalOptions="CenterAndExpand"
+               VerticalOptions="CenterAndExpand"
+               WidthRequest="80"
+               HeightRequest="80"
+               CornerRadius="40"
+               Grid.Row="0">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="Gold"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand"
+                               WidthRequest="60"
+                               HeightRequest="60"
+                               Grid.RowSpan="2"/>
+        </Frame>
+    </Grid>
+</ContentPage>

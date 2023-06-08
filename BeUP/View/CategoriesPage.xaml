@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:BeUP.ViewModels"
+             xmlns:converter="clr-namespace:BeUP.Converters"             
+             xmlns:model="clr-namespace:BeUP.Models"
+             xmlns:local="clr-namespace:BeUP.Services"
+             x:DataType="viewmodels:CategoriesViewModel"
+             x:Class="BeUP.View.CategoriesPage">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="logo"
+                   Margin="0, 0, 5, 0"
+                   WidthRequest="35"/>
+            <Label Text="BeUP" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="24"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <Grid>
+        <CollectionView ItemsSource="{Binding Categories}"
+                        Grid.Row="1"
+                        BackgroundColor="WhiteSmoke">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Grid Padding="10, 6, 10, 6">
+                        <Frame Padding="24, 6, 6, 6"
+                               Margin="1"
+                               BorderColor="Transparent"
+                               BackgroundColor="LightGray"
+                               CornerRadius="70">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer CommandParameter="{Binding .}"
+                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}, Path=GoToCategoryCommand}"/>
+                            </Frame.GestureRecognizers>
+                            <Label Text="{Binding .}"
+                                   FontSize="20"
+                                   TextColor="Black"/>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        <Frame IsVisible="{Binding IsBusy}"
+                   BackgroundColor="WhiteSmoke"
+                   BorderColor="LightGray"
+                   HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand"
+                   WidthRequest="80"
+                   HeightRequest="80"
+                   CornerRadius="40">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                                   IsRunning="{Binding IsBusy}"
+                                   Color="Gold"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   WidthRequest="60"
+                                   HeightRequest="60"
+                                   Grid.RowSpan="2"/>
+        </Frame>
+        
+    </Grid>
+
+</ContentPage>
