@@ -56,28 +56,24 @@ public static class BreakfastService
     public static async Task UpdateAllData(Collection<Breakfast> breakfasts)
     {
         await Init();
-
         await db.UpdateAllAsync(breakfasts);
     }
 
     public static async Task AddRecord(Breakfast breakfast)
     {
         await Init();
-
         await db.InsertAsync(breakfast);
     }
 
     public static async Task SaveChanges(Breakfast breakfast)
     {
         await Init();
-
         await db.UpdateAsync(breakfast);
     }
 
     public static async Task DeleteBreakfast(Breakfast breakfast)
     {
         await Init();
-
         await db.DeleteAsync(breakfast);
     }
 }
