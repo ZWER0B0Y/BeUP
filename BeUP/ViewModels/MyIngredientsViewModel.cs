@@ -122,7 +122,7 @@ public partial class MyIngredientsViewModel : BaseViewModel
         temp.Chosen = false;
         AllIngredients.Add(temp);
 
-        await Shell.Current.DisplayAlert("Увага!", $"Інгредієнт {Name}, було додано у кінець списку.", "OK"); 
+        await Shell.Current.DisplayAlert("Готово!", $"Інгредієнт {Name}, було додано у кінець списку.", "OK"); 
     }
 
     [RelayCommand]
