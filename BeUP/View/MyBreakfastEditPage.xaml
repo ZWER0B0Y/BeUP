@@ -34,22 +34,22 @@
           BackgroundColor="WhiteSmoke">
         <ScrollView Grid.Row="0">
             <VerticalStackLayout>
-                <Grid ColumnDefinitions="Auto"
-                      HorizontalOptions="Center"
-                      RowDefinitions="Auto">
-                    <Frame HeightRequest="300"
-                           CornerRadius="0">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastEditViewModel}}, Path=GetImageCommand}"/>
-                        </Frame.GestureRecognizers>
-                        <Image Grid.RowSpan="2"
-                               HeightRequest="300"
+                <Frame HeightRequest="300"
+                       CornerRadius="0"
+                       Padding="0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyBreakfastEditViewModel}}, Path=GetImageCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto"
+                          HorizontalOptions="Center"
+                          RowDefinitions="Auto">
+                        <Image HeightRequest="300"
                                HorizontalOptions="Center"
                                Aspect="AspectFill"
                                Source="{Binding Breakfast.Image}"/>
-                    </Frame>
-                </Grid>
-
+                    </Grid>
+                </Frame>
+                
                 <Label Text="Натисінть на фотографію, для того, щоб змінити її."
                        TextColor="Black"
                        Grid.Row="1"

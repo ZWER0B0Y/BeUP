@@ -27,8 +27,6 @@ public partial class MyBreakfastEditPage : ContentPage
 
     public void RemovePage(Page page)
     {
-        var viewModel = BindingContext as MyBreakfastEditViewModel;
-
         Navigation.RemovePage(page);
     }
 
