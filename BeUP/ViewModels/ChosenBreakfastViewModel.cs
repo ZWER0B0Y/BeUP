@@ -179,16 +179,21 @@ public partial class ChosenBreakfastViewModel : BaseViewModel
             return;
         }
 
-        await NotificationService.MakeNotification(hours, minutes);
-
         if (Hours.Length == 1)
             Hours = "0" + Hours;
 
         if (Minutes.Length == 1)
             Minutes = "0" + Minutes;
 
+        if (await LocalNotificationCenter.Current.AreNotificationsEnabled() == false)
+        {
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
+        }
+
         if (await LocalNotificationCenter.Current.AreNotificationsEnabled() == true)
         {
+            await NotificationService.MakeNotification(hours, minutes);
+
             if (hours < DateTime.Now.Hour || minutes <= DateTime.Now.Minute)
             {
                 await Shell.Current.DisplayAlert("Готово!", $"Ми нагадаємо вам про рецепт завтра у {Hours}:{Minutes}.", "OK");

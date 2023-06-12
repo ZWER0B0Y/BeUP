@@ -13,11 +13,6 @@ public static class NotificationService
 {
     public static async Task MakeNotification(int hours, int minutes)
     {
-        if (await LocalNotificationCenter.Current.AreNotificationsEnabled() == false)
-        {
-            await LocalNotificationCenter.Current.RequestNotificationPermission();
-        }
-
         DateTime requestedTime = DateTime.Today;
         requestedTime = requestedTime.AddHours(hours);
         requestedTime = requestedTime.AddMinutes(minutes);
